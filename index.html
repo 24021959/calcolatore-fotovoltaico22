@@ -346,7 +346,7 @@
 
   <script>
     // Funzione per formattare i numeri:
-    // Arrotonda per eccesso al numero di decimali specificato e formatta con separatore migliaia (punto)
+    // Arrotonda per eccesso e formatta con separatore migliaia (punto)
     function formatNumber(num, decimals) {
       const factor = Math.pow(10, decimals);
       const rounded = Math.ceil(num * factor) / factor;
@@ -580,30 +580,30 @@
         }
       }
 
-      // Aggiorna i risultati nel DOM usando la funzione formatNumber
-      document.getElementById('potenza').textContent = formatNumber(potenza, 2) + ' kWp';
+      // Aggiorna i risultati nel DOM usando la funzione formatNumber (senza decimali)
+      document.getElementById('potenza').textContent = formatNumber(potenza, 0) + ' kWp';
       document.getElementById('produzione').textContent = formatNumber(produzione, 0) + ' kWh';
-      document.getElementById('guadagno').textContent = formatNumber(guadagnoAnnuo, 2) + ' €';
-      document.getElementById('co2').textContent = formatNumber(co2Risparmiata, 2) + ' ton/anno';
+      document.getElementById('guadagno').textContent = formatNumber(guadagnoAnnuo, 0) + ' €';
+      document.getElementById('co2').textContent = formatNumber(co2Risparmiata, 0) + ' ton/anno';
       document.getElementById('email-display').textContent = email;
 
-      document.getElementById('guadagno-partecipazione').textContent = formatNumber(guadagnoAnnuo, 2) + ' €';
-      document.getElementById('guadagno-partecipazione-20').textContent = formatNumber(cumulativoPartecipazione, 2) + ' €';
+      document.getElementById('guadagno-partecipazione').textContent = formatNumber(guadagnoAnnuo, 0) + ' €';
+      document.getElementById('guadagno-partecipazione-20').textContent = formatNumber(cumulativoPartecipazione, 0) + ' €';
 
-      document.getElementById('prezzo-acquisto').textContent = formatNumber(prezzoAcquistoDopoUnAnno, 2) + ' €';
-      document.getElementById('guadagno-acquisto').textContent = formatNumber(guadagnoAnnuo, 2) + ' €';
+      document.getElementById('prezzo-acquisto').textContent = formatNumber(prezzoAcquistoDopoUnAnno, 0) + ' €';
+      document.getElementById('guadagno-acquisto').textContent = formatNumber(guadagnoAnnuo, 0) + ' €';
       const breakEven = guadagnoAnnuo ? (prezzoAcquistoDopoUnAnno / guadagnoAnnuo) : 0;
-      document.getElementById('break-even').textContent = formatNumber(breakEven, 1);
-      document.getElementById('guadagno-acquisto-20').textContent = formatNumber(cumulativoAcquisto, 2) + ' €';
+      document.getElementById('break-even').textContent = formatNumber(breakEven, 0);
+      document.getElementById('guadagno-acquisto-20').textContent = formatNumber(cumulativoAcquisto, 0) + ' €';
 
-      document.getElementById('investimento-confronto').textContent = formatNumber(costoImpianto, 2) + ' €';
-      document.getElementById('guadagno-part-confronto').textContent = formatNumber(cumulativoPartecipazione, 2) + ' €';
-      document.getElementById('guadagno-acq-confronto').textContent = formatNumber(cumulativoAcquisto, 2) + ' €';
+      document.getElementById('investimento-confronto').textContent = formatNumber(costoImpianto, 0) + ' €';
+      document.getElementById('guadagno-part-confronto').textContent = formatNumber(cumulativoPartecipazione, 0) + ' €';
+      document.getElementById('guadagno-acq-confronto').textContent = formatNumber(cumulativoAcquisto, 0) + ' €';
       const differenza = Math.abs(cumulativoAcquisto - cumulativoPartecipazione);
-      document.getElementById('differenza-guadagno').textContent = formatNumber(differenza, 2) + ' €';
+      document.getElementById('differenza-guadagno').textContent = formatNumber(differenza, 0) + ' €';
       const scenarioMigliore = cumulativoPartecipazione > cumulativoAcquisto ? "a favore della partecipazione" : "a favore dell'acquisto";
       document.getElementById('scenario-migliore').textContent = scenarioMigliore;
-      document.getElementById('guadagno-20-anni').textContent = formatNumber(Math.max(cumulativoAcquisto, cumulativoPartecipazione), 2) + ' €';
+      document.getElementById('guadagno-20-anni').textContent = formatNumber(Math.max(cumulativoAcquisto, cumulativoPartecipazione), 0) + ' €';
 
       // Mostra i risultati e nasconde il form
       document.getElementById('form-container').style.display = 'none';
@@ -615,3 +615,4 @@
   </script>
 </body>
 </html>
+
