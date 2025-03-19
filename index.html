@@ -503,8 +503,8 @@
     
       // Calcoli base
       const fattoreRegionale = zonaGeografica === "Nord Italia" ? 1100 : (zonaGeografica === "Centro Italia" ? 1300 : 1500);
-      const superficieUtile = superficie * (tipoSuperficie === 'tetto' ? 0.7 : 0.5);
-      const densitaPotenza = tipoSuperficie === 'tetto' ? 0.2 : 0.18;
+      const superficieUtile = superficie * (tipoSuperficie === 'tetto' ? 0.8 : 0.7);
+      const densitaPotenza = tipoSuperficie === 'tetto' ? 0.22 : 0.20;
       const fattoreConsumo = fasciaConsumo === 'giorno' ? 1.2 : 0.8;
     
       const potenza = superficieUtile * densitaPotenza;
