@@ -90,9 +90,9 @@
           <label class="form-label fw-bold">Superficie disponibile (m²)</label>
           <input type="range" class="form-range" min="100" max="10000" step="100" id="superficie" name="superficie" value="1000">
           <div class="d-flex justify-content-between">
-            <span>100 m²</span>
-            <span id="superficie-value">1000 m²</span>
-            <span>10.000 m²</span>
+            <span id="min-range">100 m²</span>
+            <span id="superficie-value">1.000 m²</span>
+            <span id="max-range">10.000 m²</span>
           </div>
         </div>
 
@@ -345,15 +345,25 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
+    // Funzione per formattare i numeri:
+    // Arrotonda per eccesso al numero di decimali specificato e formatta con separatore migliaia (punto)
+    function formatNumber(num, decimals) {
+      const factor = Math.pow(10, decimals);
+      const rounded = Math.ceil(num * factor) / factor;
+      return rounded.toLocaleString('it-IT', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+    }
+
     // Riferimenti agli elementi per lo slider
     const radioTetto = document.getElementById('tetto');
     const radioTerreno = document.getElementById('terreno');
     const sliderSuperficie = document.getElementById('superficie');
     const superficieValue = document.getElementById('superficie-value');
+    const minRange = document.getElementById('min-range');
+    const maxRange = document.getElementById('max-range');
 
     // Aggiorna il valore dello slider quando cambia
     sliderSuperficie.addEventListener('input', function() {
-      superficieValue.textContent = this.value + ' m²';
+      superficieValue.textContent = formatNumber(this.value, 0) + ' m²';
     });
 
     // Funzione per aggiornare il range dello slider in base alla scelta (tetto o terreno)
@@ -367,8 +377,8 @@
         } else if (parseInt(sliderSuperficie.value) < 100) {
           sliderSuperficie.value = 100;
         }
-        document.querySelectorAll('.d-flex.justify-content-between span')[0].textContent = '100 m²';
-        document.querySelectorAll('.d-flex.justify-content-between span')[2].textContent = '10.000 m²';
+        minRange.textContent = formatNumber(100, 0) + ' m²';
+        maxRange.textContent = formatNumber(10000, 0) + ' m²';
       } else {
         sliderSuperficie.min = 5000;
         sliderSuperficie.max = 50000;
@@ -378,10 +388,10 @@
         } else if (parseInt(sliderSuperficie.value) > 50000) {
           sliderSuperficie.value = 50000;
         }
-        document.querySelectorAll('.d-flex.justify-content-between span')[0].textContent = '5.000 m²';
-        document.querySelectorAll('.d-flex.justify-content-between span')[2].textContent = '50.000 m²';
+        minRange.textContent = formatNumber(5000, 0) + ' m²';
+        maxRange.textContent = formatNumber(50000, 0) + ' m²';
       }
-      superficieValue.textContent = sliderSuperficie.value + ' m²';
+      superficieValue.textContent = formatNumber(sliderSuperficie.value, 0) + ' m²';
     }
 
     radioTetto.addEventListener('change', aggiornaRangeSlider);
@@ -570,30 +580,30 @@
         }
       }
 
-      // Aggiorna i risultati nel DOM
-      document.getElementById('potenza').textContent = potenza.toFixed(2) + ' kWp';
-      document.getElementById('produzione').textContent = produzione.toFixed(0) + ' kWh';
-      document.getElementById('guadagno').textContent = guadagnoAnnuo.toFixed(2) + ' €';
-      document.getElementById('co2').textContent = co2Risparmiata.toFixed(2) + ' ton/anno';
+      // Aggiorna i risultati nel DOM usando la funzione formatNumber
+      document.getElementById('potenza').textContent = formatNumber(potenza, 2) + ' kWp';
+      document.getElementById('produzione').textContent = formatNumber(produzione, 0) + ' kWh';
+      document.getElementById('guadagno').textContent = formatNumber(guadagnoAnnuo, 2) + ' €';
+      document.getElementById('co2').textContent = formatNumber(co2Risparmiata, 2) + ' ton/anno';
       document.getElementById('email-display').textContent = email;
 
-      document.getElementById('guadagno-partecipazione').textContent = guadagnoAnnuo.toFixed(2) + ' €';
-      document.getElementById('guadagno-partecipazione-20').textContent = cumulativoPartecipazione.toFixed(2) + ' €';
+      document.getElementById('guadagno-partecipazione').textContent = formatNumber(guadagnoAnnuo, 2) + ' €';
+      document.getElementById('guadagno-partecipazione-20').textContent = formatNumber(cumulativoPartecipazione, 2) + ' €';
 
-      document.getElementById('prezzo-acquisto').textContent = prezzoAcquistoDopoUnAnno.toFixed(2) + ' €';
-      document.getElementById('guadagno-acquisto').textContent = guadagnoAnnuo.toFixed(2) + ' €';
+      document.getElementById('prezzo-acquisto').textContent = formatNumber(prezzoAcquistoDopoUnAnno, 2) + ' €';
+      document.getElementById('guadagno-acquisto').textContent = formatNumber(guadagnoAnnuo, 2) + ' €';
       const breakEven = guadagnoAnnuo ? (prezzoAcquistoDopoUnAnno / guadagnoAnnuo) : 0;
-      document.getElementById('break-even').textContent = breakEven.toFixed(1);
-      document.getElementById('guadagno-acquisto-20').textContent = cumulativoAcquisto.toFixed(2) + ' €';
+      document.getElementById('break-even').textContent = formatNumber(breakEven, 1);
+      document.getElementById('guadagno-acquisto-20').textContent = formatNumber(cumulativoAcquisto, 2) + ' €';
 
-      document.getElementById('investimento-confronto').textContent = costoImpianto.toFixed(2) + ' €';
-      document.getElementById('guadagno-part-confronto').textContent = cumulativoPartecipazione.toFixed(2) + ' €';
-      document.getElementById('guadagno-acq-confronto').textContent = cumulativoAcquisto.toFixed(2) + ' €';
+      document.getElementById('investimento-confronto').textContent = formatNumber(costoImpianto, 2) + ' €';
+      document.getElementById('guadagno-part-confronto').textContent = formatNumber(cumulativoPartecipazione, 2) + ' €';
+      document.getElementById('guadagno-acq-confronto').textContent = formatNumber(cumulativoAcquisto, 2) + ' €';
       const differenza = Math.abs(cumulativoAcquisto - cumulativoPartecipazione);
-      document.getElementById('differenza-guadagno').textContent = differenza.toFixed(2) + ' €';
+      document.getElementById('differenza-guadagno').textContent = formatNumber(differenza, 2) + ' €';
       const scenarioMigliore = cumulativoPartecipazione > cumulativoAcquisto ? "a favore della partecipazione" : "a favore dell'acquisto";
       document.getElementById('scenario-migliore').textContent = scenarioMigliore;
-      document.getElementById('guadagno-20-anni').textContent = Math.max(cumulativoAcquisto, cumulativoPartecipazione).toFixed(2) + ' €';
+      document.getElementById('guadagno-20-anni').textContent = formatNumber(Math.max(cumulativoAcquisto, cumulativoPartecipazione), 2) + ' €';
 
       // Mostra i risultati e nasconde il form
       document.getElementById('form-container').style.display = 'none';
