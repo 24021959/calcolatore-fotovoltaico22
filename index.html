@@ -6,26 +6,19 @@
   <title>Calcolatore Fotovoltaico</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    /* Contenitore: mobile 100%, desktop 70% */
     .calculator-container { 
-    width: 100%;
-  margin: 0 auto;
-}
-
-@media (min-width: 768px) {
-  .calculator-container {
-    width: 70%;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      width: 100%;
+      margin: 0 auto;
     }
-    .result-card { 
-      background-color: #f8f9fa; 
-      padding: 20px; 
-      border-radius: 10px; 
-      margin-top: 20px; 
-      transition: all 0.3s ease;
+    @media (min-width: 768px) {
+      .calculator-container {
+        width: 70%;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      }
     }
-    .result-card:hover {
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
+    
+    /* Stili generali */
     .header-blue {
       background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
       color: white;
@@ -46,10 +39,33 @@
       padding: 0.75rem 1.5rem;
       font-weight: 600;
       letter-spacing: 0.5px;
+      color: white;
     }
     .btn-custom-primary:hover {
       background-color: #1565c0;
       border-color: #1565c0;
+      color: white;
+    }
+    /* Media query per dispositivi mobili: assicurare lo sfondo blu e il testo bianco sul bottone e visibilità dell'intestazione */
+    @media (max-width: 767px) {
+      .header-blue {
+        background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+      }
+      .btn-custom-primary {
+        background-color: #1976d2 !important;
+        border-color: #1976d2 !important;
+        color: white !important;
+      }
+    }
+    .result-card { 
+      background-color: #f8f9fa; 
+      padding: 20px; 
+      border-radius: 10px; 
+      margin-top: 20px; 
+      transition: all 0.3s ease;
+    }
+    .result-card:hover {
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
     .results-container {
       background-color: white;
@@ -190,12 +206,12 @@
           </div>
         </div>
 
-        <!-- Calcola button -->
+        <!-- Bottone Calcola -->
         <button type="submit" class="btn btn-custom-primary w-100 mt-4 py-3">RICEVI LA SIMULAZIONE</button>
       </form>
     </div>
 
-    <!-- Risultati -->
+    <!-- Sezione Risultati -->
     <div id="risultati" class="results-container" style="display: none;">
       <div class="results-header">
         <h3 class="mb-0">Grazie! Ecco i risultati della tua simulazione</h3>
@@ -211,7 +227,7 @@
           <p><strong>Produzione annua:</strong> <span id="produzione">0 kWh</span></p>
         </div>
 
-        <!-- Tabbed risultati -->
+        <!-- Tabbed Risultati -->
         <div class="mt-4">
           <ul class="nav nav-tabs" id="resultTabs" role="tablist">
             <!-- Tab Investimento ZERO -->
@@ -237,7 +253,6 @@
           <div class="tab-content p-3 border border-top-0 rounded-bottom" id="resultTabsContent">
             <!-- Tab Investimento ZERO -->
             <div class="tab-pane fade show active" id="partecipazione" role="tabpanel" aria-labelledby="partecipazione-tab">
-              <!-- Eliminata la scritta "Scenario: Partecipazione", sostituita da "Investimento ZERO" già nell'intestazione -->
               <p><strong>Guadagno annuo:</strong> <span id="guadagno-partecipazione">0 €</span></p>
               <p><strong>Guadagno totale in 20 anni:</strong> <span id="guadagno-partecipazione-20" class="text-success fw-bold">0 €</span></p>
               <p><strong>Investimento necessario:</strong> 0 €</p>
@@ -248,8 +263,7 @@
             </div>
             <!-- Tab Acquisto -->
             <div class="tab-pane fade" id="acquisto" role="tabpanel" aria-labelledby="acquisto-tab">
-              <!-- Eliminata la scritta "Scenario: Acquisto dopo 1 anno" e "Prezzo di acquisto:" -->
-              <p><strong>Guadagno annuo (dal 2° anno):</strong> <span id="guadagno-acquisto">0 €</span></p>
+              <p><strong>Guadagno annuo:</strong> <span id="guadagno-acquisto">0 €</span></p>
               <p><strong>Tempo di recupero investimento:</strong> <span id="break-even">0</span> anni</p>
               <p><strong>Guadagno totale in 20 anni:</strong> <span id="guadagno-acquisto-20" class="text-success fw-bold">0 €</span></p>
               <!-- Grafico per Acquisto -->
@@ -310,7 +324,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Chart.js per i grafici -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
   <script>
     // Funzione per formattare i numeri: arrotonda per eccesso e formatta senza decimali
     function formatNumber(num) {
@@ -491,7 +504,7 @@
       // Calcoli base
       const fattoreRegionale = zonaGeografica === "Nord Italia" ? 1100 : (zonaGeografica === "Centro Italia" ? 1300 : 1500);
       const superficieUtile = superficie * (tipoSuperficie === 'tetto' ? 0.7 : 0.5);
-      const densitaPotenza = tipoSuperficie === 'tetto' ? 0.18 : 0.14;
+      const densitaPotenza = tipoSuperficie === 'tetto' ? 0.2 : 0.18;
       const fattoreConsumo = fasciaConsumo === 'giorno' ? 1.2 : 0.8;
     
       const potenza = superficieUtile * densitaPotenza;
@@ -569,3 +582,4 @@
   </script>
 </body>
 </html>
+
