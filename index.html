@@ -200,6 +200,12 @@
           <strong>Abbiamo ricevuto la tua richiesta e invieremo i risultati a <span id="email-display"></span></strong>
         </div>
 
+        <!-- Sezione risultati comuni -->
+        <div class="mb-4">
+          <p><strong>Potenza installabile:</strong> <span id="potenza">0 kWp</span></p>
+          <p><strong>Produzione annua:</strong> <span id="produzione">0 kWh</span></p>
+        </div>
+
         <!-- Tabbed risultati -->
         <div class="mt-4">
           <ul class="nav nav-tabs" id="resultTabs" role="tablist">
@@ -486,7 +492,7 @@
       document.getElementById('risultati').style.display = 'block';
     
       // Crea i grafici
-      // Qui visualizziamo il grafico della partecipazione; se necessario, si possono creare grafici separati
+      // Visualizziamo il grafico della partecipazione; se necessario, puoi creare anche quello dell'acquisto
       creaGrafico(datiPartecipazione);
     
       console.log("Calcolo completato");
@@ -494,5 +500,3 @@
   </script>
 </body>
 </html>
-
-
