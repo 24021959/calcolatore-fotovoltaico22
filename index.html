@@ -265,7 +265,8 @@
                     <tr class="table-success">
                       <td>Differenza</td>
                       <td colspan="2" class="text-center">
-                        <span id="differenza-guadagno" class="fw-bold">0 €</span> <span id="scenario-migliore"></span>
+                        <span id="differenza-guadagno" class="fw-bold">0 €</span>
+                        <span id="scenario-migliore"></span>
                       </td>
                     </tr>
                   </tbody>
@@ -294,7 +295,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <script>
-    // Funzione per formattare i numeri: arrotonda per eccesso e formatta con separatore migliaia (senza decimali)
+    // Funzione per formattare i numeri: arrotonda per eccesso e formatta senza decimali
     function formatNumber(num) {
       const rounded = Math.ceil(num);
       return rounded.toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
@@ -371,6 +372,7 @@
     // Gestione submit del form
     document.getElementById('calculator-form').addEventListener('submit', function(e) {
       e.preventDefault();
+      console.log("Submit del form intercettato");
     
       const nome = document.getElementById('nome').value;
       const email = document.getElementById('email').value;
@@ -423,7 +425,7 @@
       // Calcola il valore dell'energia
       const valoreEnergia = produzione * 0.15 * fattoreConsumo;
     
-      // Scenario Partecipazione: il guadagno annuo è il 17% del valore dell'energia
+      // Scenario Partecipazione: il cliente riceve il 17% del valore dell'energia
       const guadagnoPartecipazione = valoreEnergia * 0.17;
       const guadagnoPartecipazione20 = 20 * guadagnoPartecipazione;
     
@@ -475,7 +477,6 @@
       document.getElementById('scenario-migliore').textContent = scenarioMigliore;
     
       // Aggiorna elementi comuni
-      // Ad esempio, potenza, produzione, investimento e email
       document.getElementById('potenza').textContent = formatNumber(potenza) + ' kWp';
       document.getElementById('produzione').textContent = formatNumber(produzione) + ' kWh';
       document.getElementById('email-display').textContent = email;
@@ -485,13 +486,13 @@
       document.getElementById('risultati').style.display = 'block';
     
       // Crea i grafici
-      // Qui potete decidere se creare grafici separati o uno unico (ad es. con due serie)
-      // Di seguito creiamo due grafici distinti per ogni scenario
+      // Qui visualizziamo il grafico della partecipazione; se necessario, si possono creare grafici separati
       creaGrafico(datiPartecipazione);
-      // Per il grafico dell'acquisto, potete seguire lo stesso procedimento, oppure integrarli in uno unico
-      // In questo esempio, verrà visualizzato solo il grafico della partecipazione
+    
+      console.log("Calcolo completato");
     });
   </script>
 </body>
 </html>
+
 
