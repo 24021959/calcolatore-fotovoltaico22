@@ -65,9 +65,9 @@
 <body class="bg-light">
   <div class="container py-5 calculator-container">
     <div class="header-blue text-center">
-      <h1 class="mb-2">Calcolatore di Guadagno Fotovoltaico</h1>
+      <h1 class="mb-2">Calcolatore Guadagno Fotovoltaico</h1>
       <p class="mb-0">
-        Calcola quanto potresti guadagnare installando da un impianto fotovoltaico.
+        Calcola quanto potresti guadagnare installando un impianto fotovoltaico sul tetto della tua azienda o su un terreno.
       </p>
     </div>
 
@@ -164,7 +164,7 @@
 
         <!-- Form di contatto -->
         <div class="mt-4 p-4 bg-light rounded border">
-          <h4 class="mb-3">Ricevi il tuo preventivo personalizzato</h4>
+          <h4 class="mb-3">Ricevi il preventivo personalizzato</h4>
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Nome e Cognome</label>
@@ -209,19 +209,19 @@
         <!-- Tabbed risultati -->
         <div class="mt-4">
           <ul class="nav nav-tabs" id="resultTabs" role="tablist">
-            <!-- Scenario Partecipazione -->
+            <!-- Tab Investimento ZERO -->
             <li class="nav-item" role="presentation">
               <button class="nav-link active" id="partecipazione-tab" data-bs-toggle="tab" data-bs-target="#partecipazione" type="button" role="tab" aria-controls="partecipazione" aria-selected="true">
-                Partecipazione
+                Investimento ZERO
               </button>
             </li>
-            <!-- Scenario Acquisto -->
+            <!-- Tab Acquisto -->
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="acquisto-tab" data-bs-toggle="tab" data-bs-target="#acquisto" type="button" role="tab" aria-controls="acquisto" aria-selected="false">
                 Acquisto
               </button>
             </li>
-            <!-- Scenario Confronto -->
+            <!-- Tab Confronto -->
             <li class="nav-item" role="presentation">
               <button class="nav-link" id="confronto-tab" data-bs-toggle="tab" data-bs-target="#confronto" type="button" role="tab" aria-controls="confronto" aria-selected="false">
                 Confronto
@@ -230,20 +230,27 @@
           </ul>
 
           <div class="tab-content p-3 border border-top-0 rounded-bottom" id="resultTabsContent">
-            <!-- Tab Partecipazione -->
+            <!-- Tab Investimento ZERO -->
             <div class="tab-pane fade show active" id="partecipazione" role="tabpanel" aria-labelledby="partecipazione-tab">
-              <h5>Scenario: Partecipazione</h5>
+              <!-- Eliminata la scritta "Scenario: Partecipazione", sostituita da "Investimento ZERO" già nell'intestazione -->
               <p><strong>Guadagno annuo:</strong> <span id="guadagno-partecipazione">0 €</span></p>
               <p><strong>Guadagno totale in 20 anni:</strong> <span id="guadagno-partecipazione-20" class="text-success fw-bold">0 €</span></p>
               <p><strong>Investimento necessario:</strong> 0 €</p>
+              <!-- Grafico per Investimento ZERO -->
+              <div style="height: 300px;" class="mt-3">
+                <canvas id="grafico-partecipazione"></canvas>
+              </div>
             </div>
             <!-- Tab Acquisto -->
             <div class="tab-pane fade" id="acquisto" role="tabpanel" aria-labelledby="acquisto-tab">
-              <h5>Scenario: Acquisto dopo 1 anno</h5>
-              <p><strong>Prezzo di acquisto:</strong> <span id="prezzo-acquisto">0 €</span></p>
+              <!-- Eliminata la scritta "Scenario: Acquisto dopo 1 anno" e "Prezzo di acquisto:" -->
               <p><strong>Guadagno annuo (dal 2° anno):</strong> <span id="guadagno-acquisto">0 €</span></p>
               <p><strong>Tempo di recupero investimento:</strong> <span id="break-even">0</span> anni</p>
               <p><strong>Guadagno totale in 20 anni:</strong> <span id="guadagno-acquisto-20" class="text-success fw-bold">0 €</span></p>
+              <!-- Grafico per Acquisto -->
+              <div style="height: 300px;" class="mt-3">
+                <canvas id="grafico-acquisto"></canvas>
+              </div>
             </div>
             <!-- Tab Confronto -->
             <div class="tab-pane fade" id="confronto" role="tabpanel" aria-labelledby="confronto-tab">
@@ -253,7 +260,7 @@
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Partecipazione</th>
+                      <th>Investimento ZERO</th>
                       <th>Acquisto</th>
                     </tr>
                   </thead>
@@ -285,11 +292,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Se desideri mantenere un grafico cumulativo aggiuntivo (ad es. per lo scenario Partecipazione) -->
-        <!-- <div style="height: 300px;" class="mt-4">
-          <canvas id="grafico-accumulo"></canvas>
-        </div> -->
 
         <div class="mt-4 text-center">
           <p>Un nostro consulente ti contatterà presto per fornirti maggiori dettagli</p>
@@ -350,7 +352,59 @@
     radioTerreno.addEventListener('change', aggiornaRangeSlider);
     aggiornaRangeSlider();
     
-    // Funzione per creare il grafico comparativo con due serie (Partecipazione e Acquisto)
+    // Funzione per creare il grafico per Investimento ZERO (Partecipazione)
+    function creaGraficoPartecipazione(dati) {
+      const ctx = document.getElementById('grafico-partecipazione').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dati.map(d => `Anno ${d.anno}`),
+          datasets: [{
+            label: 'Investimento ZERO',
+            data: dati.map(d => d.guadagnoCumulativo),
+            borderColor: 'rgba(76,175,80,1)',
+            fill: false,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: true } },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'Euro' } }
+          }
+        }
+      });
+    }
+    
+    // Funzione per creare il grafico per lo scenario Acquisto
+    function creaGraficoAcquisto(dati) {
+      const ctx = document.getElementById('grafico-acquisto').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: dati.map(d => `Anno ${d.anno}`),
+          datasets: [{
+            label: 'Acquisto',
+            data: dati.map(d => d.guadagnoCumulativo),
+            borderColor: 'rgba(255,87,34,1)',
+            fill: false,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: true } },
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: 'Euro' } }
+          }
+        }
+      });
+    }
+    
+    // Funzione per creare il grafico comparativo (entrambi gli scenari)
     function creaGraficoComparativo(datiPartecipazione, datiAcquisto) {
       const ctx = document.getElementById('grafico-comparativo').getContext('2d');
       new Chart(ctx, {
@@ -359,19 +413,17 @@
           labels: datiPartecipazione.map(d => `Anno ${d.anno}`),
           datasets: [
             {
-              label: 'Partecipazione',
+              label: 'Investimento ZERO',
               data: datiPartecipazione.map(d => d.guadagnoCumulativo),
-              borderColor: 'rgba(76, 175, 80, 0.8)', // verde
-              backgroundColor: 'rgba(76, 175, 80, 0.3)',
-              fill: true,
+              borderColor: 'rgba(76,175,80,1)',
+              fill: false,
               tension: 0.1
             },
             {
               label: 'Acquisto',
               data: datiAcquisto.map(d => d.guadagnoCumulativo),
-              borderColor: 'rgba(255, 87, 34, 0.8)', // arancione
-              backgroundColor: 'rgba(255, 87, 34, 0.3)',
-              fill: true,
+              borderColor: 'rgba(255,87,34,1)',
+              fill: false,
               tension: 0.1
             }
           ]
@@ -379,45 +431,12 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          plugins: { legend: { display: true } },
           scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: 'Euro' }
-            }
+            y: { beginAtZero: true, title: { display: true, text: 'Euro' } }
           }
         }
       });
-    }
-    
-    // Se vuoi mantenere anche un grafico per lo scenario Partecipazione (facoltativo)
-    function creaGraficoPartecipazione(dati) {
-      const ctx = document.getElementById('grafico-accumulo')?.getContext('2d');
-      if (ctx) {
-        new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: dati.map(d => `Anno ${d.anno}`),
-            datasets: [{
-              label: 'Guadagno cumulativo (Partecipazione)',
-              data: dati.map(d => d.guadagnoCumulativo),
-              borderColor: 'rgba(76, 175, 80, 0.8)',
-              backgroundColor: 'rgba(76, 175, 80, 0.3)',
-              fill: true,
-              tension: 0.1
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                title: { display: true, text: 'Euro' }
-              }
-            }
-          }
-        });
-      }
     }
     
     // Gestione submit del form
@@ -508,12 +527,11 @@
       }
     
       // Aggiorna i risultati nel DOM (formattati senza decimali)
-      // Scenario Partecipazione
+      // Investimento ZERO (Partecipazione)
       document.getElementById('guadagno-partecipazione').textContent = formatNumber(guadagnoPartecipazione) + ' €';
       document.getElementById('guadagno-partecipazione-20').textContent = formatNumber(guadagnoPartecipazione20) + ' €';
     
       // Scenario Acquisto
-      document.getElementById('prezzo-acquisto').textContent = formatNumber(prezzoAcquisto) + ' €';
       document.getElementById('guadagno-acquisto').textContent = formatNumber(valoreEnergia) + ' €';
       document.getElementById('break-even').textContent = formatNumber(breakEven);
       document.getElementById('guadagno-acquisto-20').textContent = formatNumber(guadagnoAcquisto20) + ' €';
@@ -524,7 +542,7 @@
       document.getElementById('guadagno-acq-confronto').textContent = formatNumber(guadagnoAcquisto20) + ' €';
       const differenza = Math.abs(guadagnoAcquisto20 - guadagnoPartecipazione20);
       document.getElementById('differenza-guadagno').textContent = formatNumber(differenza) + ' €';
-      const scenarioMigliore = (guadagnoAcquisto20 > guadagnoPartecipazione20) ? "a favore dell'acquisto" : "a favore della partecipazione";
+      const scenarioMigliore = (guadagnoAcquisto20 > guadagnoPartecipazione20) ? "a favore dell'acquisto" : "a favore dell'investimento ZERO";
       document.getElementById('scenario-migliore').textContent = scenarioMigliore;
     
       // Aggiorna elementi comuni
@@ -536,7 +554,9 @@
       document.getElementById('form-container').style.display = 'none';
       document.getElementById('risultati').style.display = 'block';
     
-      // Crea i grafici comparativi (entrambi in un unico grafico nel tab Confronto)
+      // Crea i grafici per ogni tab
+      creaGraficoPartecipazione(datiPartecipazione);
+      creaGraficoAcquisto(datiAcquisto);
       creaGraficoComparativo(datiPartecipazione, datiAcquisto);
     
       console.log("Calcolo completato");
@@ -544,4 +564,3 @@
   </script>
 </body>
 </html>
-
